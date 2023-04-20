@@ -1,0 +1,18 @@
+CREATE VIEW user_purchase_summary AS SELECT
+  u.id as user_id,
+  COUNT(*) as total_purchases,
+  SUM(purchases.amount) as lifetime_value
+FROM users u
+JOIN purchases p ON p.user_id = u.id;
+
+
+
+
+
+
+CREATE MATERIALIZED VIEW user_purchase_summary AS SELECT
+  u.id as user_id,
+  COUNT(*) as total_purchases,
+  SUM(CASE when p.status = 'cancelled' THEN 1 ELSE 0 END) as cancelled_purchases
+FROM users u
+JOIN purchases p ON p.user_id = u.id;
